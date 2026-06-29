@@ -11,9 +11,9 @@ There is no build. Serve the files with any static file server from the repo roo
 python3 -m http.server 8000
 ```
 
-Then open `http://localhost:8000/index.html`. Pages: `index.html` (home), `projects.html`, `about.html`.
+Then open `http://localhost:8000/index.html`. The site is a single page (`index.html` + `style.css`).
 
 ### Notes / gotchas
-- All pages link `style.css` via a relative path and share the same nav/footer markup and a small inline `<script>` for the mobile nav toggle.
-- Fonts load from Google Fonts (`Inter`) with a system-font fallback, so the site still renders without network access.
+- Design is intentionally black & white only, on a white background.
+- `index.html` links `style.css` via a relative path; fonts load from Google Fonts (`Inter`) with a system-font fallback, so the site still renders without network access.
 - There are no automated tests, lint, or build commands to run.
