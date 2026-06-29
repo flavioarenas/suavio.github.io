@@ -83,7 +83,7 @@ p {
 
 .fade {
     opacity: 0;
-    animation: fade-in 0.8s ease forwards;
+    animation: fade-in 1.2s ease forwards;
     animation-delay: var(--delay, 0s);
 }
 
