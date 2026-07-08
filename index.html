@@ -9,15 +9,22 @@
     <title>Flavio Arenas</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
     <link href="./style.css" type="text/css" rel="stylesheet">
 </head>
 
 <body>
+    <canvas id="blackhole" aria-hidden="true"></canvas>
+    <div class="vignette" aria-hidden="true"></div>
+
     <main>
-        <h1 class="fade" style="--delay: 0.2s">Currently building:</h1>
-        <a class="link fade" style="--delay: 0.7s" href="https://princepsmedia.com" target="_blank" rel="noopener">Princeps Media →</a>
+        <p class="brand fade" style="--delay: 0.15s">Flavio Arenas</p>
+        <h1 class="fade" style="--delay: 0.45s">Currently building</h1>
+        <p class="lede fade" style="--delay: 0.7s">A quiet corner of the web while something larger takes shape.</p>
+        <a class="link fade" style="--delay: 1s" href="https://princepsmedia.com" target="_blank" rel="noopener">Princeps Media →</a>
     </main>
+
+    <script src="./blackhole.js" defer></script>
 </body>
 
 </html>
