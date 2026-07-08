@@ -4,9 +4,9 @@
 
 :root {
     --bg: #020208;
-    --fg: #f4f1ea;
-    --fg-muted: rgba(244, 241, 234, 0.72);
-    --accent: #f0d9a8;
+    --fg: #e8eef8;
+    --fg-muted: rgba(200, 214, 235, 0.72);
+    --accent: #c9d7f0;
     --font-display: "Cormorant Garamond", "Times New Roman", serif;
     --font-body: "Outfit", "Segoe UI", sans-serif;
 }
