@@ -3,21 +3,74 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Flavio Arenas — projects and Princeps Media.">
+    <meta name="description" content="Flavio Arenas — currently building Princeps Media, and currently reading Roll the Calls by Ari Emanuel.">
     <title>Flavio Arenas</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <link href="./style.css" type="text/css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,450;8..60,560&display=swap" rel="stylesheet">
+    <link href="./style.css" rel="stylesheet">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Book",
+        "name": "Roll the Calls",
+        "author": {
+            "@type": "Person",
+            "name": "Ari Emanuel"
+        },
+        "isbn": "9798217209347",
+        "bookFormat": "https://schema.org/Hardcover",
+        "datePublished": "2026-09-22",
+        "publisher": {
+            "@type": "Organization",
+            "name": "Knopf"
+        },
+        "url": "https://www.penguinrandomhouse.com/books/835662/roll-the-calls-by-ari-emanuel/"
+    }
+    </script>
 </head>
 
 <body>
+    <header class="site-header">
+        <p class="name">Flavio Arenas</p>
+    </header>
+
     <main>
-        <h1 class="fade" style="--delay: 0.2s">Currently building:</h1>
-        <a class="link fade" style="--delay: 0.7s" href="https://princepsmedia.com" target="_blank" rel="noopener">Princeps Media →</a>
+        <section class="panel building" id="building" aria-labelledby="building-title">
+            <h1 class="kicker" id="building-title">Currently building</h1>
+            <a class="building-link" href="https://princepsmedia.com" target="_blank" rel="noopener noreferrer">Princeps Media <span aria-hidden="true">→</span></a>
+        </section>
+
+        <section class="panel reading" id="reading" aria-labelledby="reading-title">
+            <h2 class="kicker" id="reading-title">Currently reading</h2>
+
+            <figure class="book-figure">
+                <div class="stage">
+                    <div class="book" data-book>
+                        <div class="face back"></div>
+                        <div class="face spine"></div>
+                        <div class="face pages"></div>
+                        <div class="face head"></div>
+                        <div class="face front">
+                            <img src="./assets/roll-the-calls.jpg" width="1100" height="1661" alt="Cover of Roll the Calls by Ari Emanuel">
+                            <span class="hinge" aria-hidden="true"></span>
+                        </div>
+                    </div>
+                </div>
+                <figcaption class="credit">
+                    <p class="work">Roll the Calls</p>
+                    <p class="author">Ari Emanuel</p>
+                    <p class="meta">Memoir · Knopf · September 22, 2026</p>
+                    <p class="meta">
+                        <a href="https://www.penguinrandomhouse.com/books/835662/roll-the-calls-by-ari-emanuel/" target="_blank" rel="noopener noreferrer">Penguin Random House</a>
+                    </p>
+                </figcaption>
+            </figure>
+        </section>
     </main>
+
+    <script src="./book.js"></script>
 </body>
 
 </html>
