@@ -1,0 +1,50 @@
+(function () {
+    var book = document.querySelector("[data-book]");
+    if (!book) return;
+
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) return;
+
+    var section = document.querySelector(".reading");
+
+    var rest = { x: 8, y: 28 };
+    var opened = { x: 14, y: 40 };
+    var current = { x: rest.x, y: rest.y };
+    var pointer = { x: 0, y: 0 };
+
+    function scrollBase() {
+        if (!section) return rest;
+        var rect = section.getBoundingClientRect();
+        var vh = window.innerHeight || 1;
+        var raw = 1 - rect.top / (vh * 0.7);
+        var t = Math.min(1, Math.max(0, raw));
+        var e = t * t * (3 - 2 * t);
+        return {
+            x: opened.x + (rest.x - opened.x) * e,
+            y: opened.y + (rest.y - opened.y) * e
+        };
+    }
+
+    window.addEventListener("pointermove", function (event) {
+        if (event.pointerType === "touch") return;
+        var rect = book.getBoundingClientRect();
+        if (!rect.width || !rect.height) return;
+        var dx = (event.clientX - (rect.left + rect.width / 2)) / rect.width;
+        var dy = (event.clientY - (rect.top + rect.height / 2)) / rect.height;
+        pointer.y = Math.max(-12, Math.min(12, dx * 22));
+        pointer.x = Math.max(-8, Math.min(8, -dy * 14));
+    }, { passive: true });
+
+    function frame() {
+        var base = scrollBase();
+        var targetX = base.x + pointer.x;
+        var targetY = base.y + pointer.y;
+        current.x += (targetX - current.x) * 0.14;
+        current.y += (targetY - current.y) * 0.14;
+        book.style.setProperty("--rx", current.x.toFixed(2) + "deg");
+        book.style.setProperty("--ry", current.y.toFixed(2) + "deg");
+        requestAnimationFrame(frame);
+    }
+
+    requestAnimationFrame(frame);
+})();
