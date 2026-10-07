@@ -5,7 +5,6 @@
     var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduce) return;
 
-    var fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
     var section = document.querySelector(".reading");
 
     var rest = { x: 8, y: 28 };
@@ -26,24 +25,22 @@
         };
     }
 
-    if (fine) {
-        window.addEventListener("pointermove", function (event) {
-            if (event.pointerType && event.pointerType !== "mouse") return;
-            var rect = book.getBoundingClientRect();
-            if (!rect.width || !rect.height) return;
-            var dx = (event.clientX - (rect.left + rect.width / 2)) / rect.width;
-            var dy = (event.clientY - (rect.top + rect.height / 2)) / rect.height;
-            pointer.y = Math.max(-8, Math.min(8, dx * 9));
-            pointer.x = Math.max(-6, Math.min(6, -dy * 6));
-        }, { passive: true });
-    }
+    window.addEventListener("pointermove", function (event) {
+        if (event.pointerType === "touch") return;
+        var rect = book.getBoundingClientRect();
+        if (!rect.width || !rect.height) return;
+        var dx = (event.clientX - (rect.left + rect.width / 2)) / rect.width;
+        var dy = (event.clientY - (rect.top + rect.height / 2)) / rect.height;
+        pointer.y = Math.max(-12, Math.min(12, dx * 22));
+        pointer.x = Math.max(-8, Math.min(8, -dy * 14));
+    }, { passive: true });
 
     function frame() {
         var base = scrollBase();
         var targetX = base.x + pointer.x;
         var targetY = base.y + pointer.y;
-        current.x += (targetX - current.x) * 0.08;
-        current.y += (targetY - current.y) * 0.08;
+        current.x += (targetX - current.x) * 0.14;
+        current.y += (targetY - current.y) * 0.14;
         book.style.setProperty("--rx", current.x.toFixed(2) + "deg");
         book.style.setProperty("--ry", current.y.toFixed(2) + "deg");
         requestAnimationFrame(frame);
