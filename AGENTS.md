@@ -2,7 +2,7 @@
 
 ## Cursor Cloud specific instructions
 
-This repository is a static personal website (GitHub Pages, served at `www.flavioarenas.com` via the `CNAME` file). It is plain HTML/CSS with no package manager, build step, tests, or lint configuration.
+This repository is a static personal website. Vercel serves it from `master`. `CNAME` stays `www.flavioarenas.com`. It is plain HTML/CSS with no package manager, build step, tests, or lint configuration.
 
 ### Running locally
 There is no build. Serve the files with any static file server from the repo root, e.g.:
@@ -14,8 +14,7 @@ python3 -m http.server 8000
 Then open `http://localhost:8000/index.html`. The site is a single page (`index.html`, `style.css`, `book.js`, and `assets/roll-the-calls.jpg`).
 
 ### Notes / gotchas
-- Quiet paper-and-ink page. The published jacket on the Currently reading book is the only strong color.
-- Currently building links to `https://princepsmedia.com`. Currently reading is a CSS 3D hardcover (`book.js` tilts with the pointer and settles on scroll; both are off when `prefers-reduced-motion` is set).
-- `CNAME` is the Pages custom domain and must stay exactly `www.flavioarenas.com` (no trailing newline). That host is canonical. Apex `flavioarenas.com` reaches the same site only after DNS: four `A` records and four `AAAA` records on the apex to GitHub Pages, while `www` stays a `CNAME` to `flavioarenas.github.io`. Pages then redirects the apex to `www`. Enforce HTTPS is already on. GitHub Pages serves the repo root from `master`.
-- `index.html` links assets via relative paths. Fonts load from Google Fonts (`Inter`, `Source Serif 4`) with system-font fallbacks, so the page still renders without network access.
+- Dark shelf in the manner of Stripe Press. Currently building (Princeps Media) and Currently reading (Roll the Calls) rest as horizontal spines. Clicking one stands it face-on and opens a summary beside it. `book.js` toggles that state; `prefers-reduced-motion` skips the transition.
+- `CNAME` must stay exactly `www.flavioarenas.com` (no trailing newline). Do not change DNS from this repo. The site is static files at the repo root.
+- `index.html` links assets via relative paths. Fonts load from Google Fonts (`Source Serif 4`) with a system-font fallback, so the page still renders without network access.
 - There are no automated tests, lint, or build commands to run.

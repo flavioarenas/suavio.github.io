@@ -1,50 +1,118 @@
 (function () {
-    var book = document.querySelector("[data-book]");
-    if (!book) return;
+    var items = Array.prototype.slice.call(document.querySelectorAll("[data-item]"));
+    if (!items.length) return;
 
     var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduce) return;
+    var openItem = null;
+    var closeTimers = new WeakMap();
 
-    var section = document.querySelector(".reading");
-
-    var rest = { x: 8, y: 28 };
-    var opened = { x: 14, y: 40 };
-    var current = { x: rest.x, y: rest.y };
-    var pointer = { x: 0, y: 0 };
-
-    function scrollBase() {
-        if (!section) return rest;
-        var rect = section.getBoundingClientRect();
-        var vh = window.innerHeight || 1;
-        var raw = 1 - rect.top / (vh * 0.7);
-        var t = Math.min(1, Math.max(0, raw));
-        var e = t * t * (3 - 2 * t);
-        return {
-            x: opened.x + (rest.x - opened.x) * e,
-            y: opened.y + (rest.y - opened.y) * e
-        };
+    function panelOf(item) {
+        return item.querySelector(".summary");
     }
 
-    window.addEventListener("pointermove", function (event) {
-        if (event.pointerType === "touch") return;
-        var rect = book.getBoundingClientRect();
-        if (!rect.width || !rect.height) return;
-        var dx = (event.clientX - (rect.left + rect.width / 2)) / rect.width;
-        var dy = (event.clientY - (rect.top + rect.height / 2)) / rect.height;
-        pointer.y = Math.max(-12, Math.min(12, dx * 22));
-        pointer.x = Math.max(-8, Math.min(8, -dy * 14));
-    }, { passive: true });
-
-    function frame() {
-        var base = scrollBase();
-        var targetX = base.x + pointer.x;
-        var targetY = base.y + pointer.y;
-        current.x += (targetX - current.x) * 0.14;
-        current.y += (targetY - current.y) * 0.14;
-        book.style.setProperty("--rx", current.x.toFixed(2) + "deg");
-        book.style.setProperty("--ry", current.y.toFixed(2) + "deg");
-        requestAnimationFrame(frame);
+    function triggerOf(item) {
+        return item.querySelector(".object");
     }
 
-    requestAnimationFrame(frame);
+    function finishClose(item) {
+        if (item.classList.contains("is-open")) return;
+        if (item === openItem) return;
+        panelOf(item).hidden = true;
+    }
+
+    function cancelClose(item) {
+        var timer = closeTimers.get(item);
+        if (timer) window.clearTimeout(timer);
+        closeTimers.delete(item);
+    }
+
+    function scheduleClose(item) {
+        cancelClose(item);
+        if (reduce) {
+            finishClose(item);
+            return;
+        }
+        var panel = panelOf(item);
+        var timer = window.setTimeout(function () {
+            panel.removeEventListener("transitionend", onEnd);
+            finishClose(item);
+        }, 520);
+        closeTimers.set(item, timer);
+        function onEnd(event) {
+            if (event.target !== panel || event.propertyName !== "opacity") return;
+            cancelClose(item);
+            panel.removeEventListener("transitionend", onEnd);
+            finishClose(item);
+        }
+        panel.addEventListener("transitionend", onEnd);
+    }
+
+    function reveal(item) {
+        var shelf = item.closest(".shelf") || item;
+        shelf.scrollIntoView({ block: "start", behavior: reduce ? "auto" : "smooth" });
+    }
+
+    function setOpen(item) {
+        items.forEach(function (other) {
+            var on = other === item;
+            triggerOf(other).setAttribute("aria-expanded", on ? "true" : "false");
+            var panel = panelOf(other);
+            if (on) {
+                cancelClose(other);
+                panel.hidden = false;
+                if (reduce) other.classList.add("is-open");
+                else other.classList.remove("is-open");
+            } else if (other.classList.contains("is-open") || !panel.hidden) {
+                other.classList.remove("is-open");
+                scheduleClose(other);
+            }
+        });
+        document.body.dataset.open = item ? item.getAttribute("data-item") : "";
+        openItem = item;
+        if (!item) return;
+        if (reduce) {
+            reveal(item);
+            return;
+        }
+        requestAnimationFrame(function () {
+            requestAnimationFrame(function () {
+                if (openItem !== item) return;
+                item.classList.add("is-open");
+                reveal(item);
+            });
+        });
+        // The shelf grows with the book. Scroll again once the page is tall enough to move.
+        window.setTimeout(function () {
+            if (openItem === item) reveal(item);
+        }, 640);
+    }
+
+    items.forEach(function (item) {
+        triggerOf(item).addEventListener("click", function () {
+            var next = openItem === item ? null : item;
+            var previous = openItem;
+            setOpen(next);
+            if (!next && previous) triggerOf(previous).focus();
+        });
+
+        panelOf(item).querySelector(".close").addEventListener("click", function () {
+            setOpen(null);
+            triggerOf(item).focus();
+        });
+    });
+
+    document.addEventListener("keydown", function (event) {
+        if (event.key !== "Escape" || !openItem) return;
+        var trigger = triggerOf(openItem);
+        setOpen(null);
+        trigger.focus();
+    });
+
+    document.addEventListener("click", function (event) {
+        if (!openItem) return;
+        if (event.target.closest("[data-item]")) return;
+        var trigger = triggerOf(openItem);
+        setOpen(null);
+        trigger.focus();
+    });
 })();
